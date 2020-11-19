@@ -8,7 +8,7 @@ public class DataPackage {
     //maximale Datenteil-Länge
     private int dataPackageLength;
     private int serialNumber;
-    private boolean ifVersionIPv4;
+    private int IPVersion;
     private String absender;
     private String empfaenger;
     private String message;
@@ -24,10 +24,10 @@ public class DataPackage {
     /**
      *
      */
-    public DataPackage(int dataPackageLength, int serialNumber, boolean ifVersionIPv4, String absender, String empfaenger, String message){
+    public DataPackage(int dataPackageLength, int serialNumber, int IPVersion, String absender, String empfaenger, String message){
         this.dataPackageLength = dataPackageLength;
         this.serialNumber = serialNumber;
-        this.ifVersionIPv4 = ifVersionIPv4;
+        this.IPVersion = IPVersion;
         this.absender = absender;
         this.empfaenger = empfaenger;
         this.message = message;
@@ -47,5 +47,15 @@ public class DataPackage {
      */
     public void setDataPackageLength(int dataPackageLength) {
         this.dataPackageLength = dataPackageLength;
+    }
+
+    public void show(){
+        System.out.println("Version: " + IPVersion);
+        System.out.println("Absender: " + absender);
+        System.out.println("Empfänger: " + empfaenger);
+        System.out.println("Paketlaufnummer: " + serialNumber);
+        System.out.println("Datenteil-Länge: " + dataPackageLength);
+        System.out.println("Datenteil: " + message);
+
     }
 }
