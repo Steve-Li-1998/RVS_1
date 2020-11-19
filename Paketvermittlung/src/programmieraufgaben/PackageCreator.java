@@ -1,5 +1,6 @@
 package programmieraufgaben;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
@@ -29,10 +30,10 @@ public class PackageCreator {
         boolean setIPVersionSuccessful = false;     //Diese Variable ändert sich wahr, nachdem die IP-Version erfolgreich eingesetzt wurde.
         while (!setIPVersionSuccessful){
             temp = input.nextLine();
-            if(0 == temp.compareTo("4")){
+            if(0 == temp.compareTo("4") | 0 == temp.compareTo("v4")){
                 ifVersionIPv4 = true;
                 setIPVersionSuccessful = true;
-            }else if(0 == temp.compareTo("6")){
+            }else if(0 == temp.compareTo("6") | 0 == temp.compareTo("v6")){
                 ifVersionIPv4 = false;
                 setIPVersionSuccessful = true;
             }else {
@@ -58,7 +59,57 @@ public class PackageCreator {
      */
     public List<DataPackage> splitPackage(DataPackage dataPackage) {
         List<DataPackage> dataPackages = new LinkedList<>();
+        ArrayList wordStartIndex = new ArrayList(0);    // diese Array speichert immer den Index erstes Buchstabens eines Wortes
+        ArrayList wordEndIndex = new ArrayList(0);      // diese Array speichert immer den Index letztes Buchstabens eines Wortes + 1
+        int wordCounter = 0;
         buffer = buffer.replace("<CR><LF>", "\n");
+        for(int i=0;i<buffer.length();i++){
+            char temp = buffer.charAt(i);
+            if (' ' == temp){
+                if (wordStartIndex.size() != wordEndIndex.size()){
+                    wordEndIndex.add(i);
+                }
+
+            }else if ('-' == temp | '/' == temp){
+                wordCounter++;
+                wordStartIndex.add(i);
+                if (wordStartIndex.size() != wordEndIndex.size()){
+                    wordEndIndex.add(i);
+                }
+                wordEndIndex.add(i+1);
+
+            }else if ('\\' == temp){
+                if ('n' == buffer.charAt(i + 1)){
+                    wordCounter++;
+                    wordStartIndex.add(i);
+                    if (wordStartIndex.size() != wordEndIndex.size()){
+                        wordEndIndex.add(i);
+                    }
+                    wordEndIndex.add(i+2);
+
+                    i++;
+                }else {
+                    if (wordStartIndex.size() == wordEndIndex.size()){
+                        wordCounter++;
+                        wordStartIndex.add(i);
+                    }
+                }
+            }else{
+                if (wordStartIndex.size() == wordEndIndex.size()){
+                    wordCounter++;
+                    wordStartIndex.add(i);
+                }
+
+            }
+            //if ((temp >= 'a' & temp <= 'z') | (temp >= 'A' & temp <= 'Z') | (temp >= '0' & temp <= '9') | 'ä'==temp){
+            //    System.out.println(temp);
+            //}
+
+        }
+        int usedWordCounter = 0;
+        while (usedWordCounter < wordCounter){
+            
+        }
 
 
         return dataPackages;
