@@ -6,16 +6,22 @@ import java.util.Scanner;
 
 public class PackageCreator {
 
+    private int maxDataPackageLength;
     private boolean ifVersionIPv4;
     private String absender;
     private String empfaenger;
     private String buffer;
 
     /**
-     * Hier ist die Konstruktor der Klasse PackageCreator
-     * Die Eingabe von benutzern wird hier durchgeführt
+     * Hier sollen die Kommandozeilen-Abfragen abgefragt und die Antworten
+     * gespeichert werden
+     * Es sollte auf Fehlerbehandlung geachtet werden (falsche Eingaben, ...)
+     *
+     * @param dataPackage Hier wird das Objekt übergeben in das die abgefragten Werte gespeichert werden sollen
+     * @return Gibt das als Parameter übergebene Objekt, dass mit den abgefragten Werten befüllt wurde zurück
      */
-    public PackageCreator(){
+    public DataPackage fillParameters(DataPackage dataPackage) {
+        maxDataPackageLength = dataPackage.getDataPackageLength();
         String temp;
         Scanner input = new Scanner(System.in);
         System.out.println("Bitte geben Sie Ihre gewünschte IP Version ein:");
@@ -38,17 +44,6 @@ public class PackageCreator {
         empfaenger = input.nextLine();
         System.out.println("Bitte geben Sie Ihre Nachricht ein:");
         buffer = input.nextLine();
-    }
-
-    /**
-     * Hier sollen die Kommandozeilen-Abfragen abgefragt und die Antworten
-     * gespeichert werden
-     * Es sollte auf Fehlerbehandlung geachtet werden (falsche Eingaben, ...)
-     *
-     * @param dataPackage Hier wird das Objekt übergeben in das die abgefragten Werte gespeichert werden sollen
-     * @return Gibt das als Parameter übergebene Objekt, dass mit den abgefragten Werten befüllt wurde zurück
-     */
-    public DataPackage fillParameters(DataPackage dataPackage) {
 
         return dataPackage;
     }

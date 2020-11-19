@@ -7,6 +7,7 @@ package programmieraufgaben;
 public class DataPackage {
     //maximale Datenteil-Länge
     private int dataPackageLength;
+    private String message;
 
     /**
      * Erzeugt ein DataPackage Objekt und speichert beim erzeugen die maximale Datenteil-Länge
