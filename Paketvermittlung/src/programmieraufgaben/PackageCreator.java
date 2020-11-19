@@ -19,7 +19,7 @@ public class PackageCreator {
         String temp;
         Scanner input = new Scanner(System.in);
         System.out.println("Bitte geben Sie Ihre gewünschte IP Version ein:");
-        boolean setIPVersionSuccessful = false;
+        boolean setIPVersionSuccessful = false;     //Diese Variable ändert sich wahr, nachdem die IP-Version erfolgreich eingesetzt wurde.
         while (!setIPVersionSuccessful){
             temp = input.nextLine();
             if(0 == temp.compareTo("4")){
