@@ -7,10 +7,10 @@ package programmieraufgaben;
 public class DataPackage {
     //maximale Datenteil-Länge
     private int dataPackageLength;
+    private int serialNumber;
     private boolean ifVersionIPv4;
     private String absender;
     private String empfaenger;
-    private int serialNumber;
     private String message;
 
     /**
@@ -19,6 +19,18 @@ public class DataPackage {
      */
     public DataPackage(int dataPackageLength) {
         this.dataPackageLength = dataPackageLength;
+    }
+
+    /**
+     *
+     */
+    public DataPackage(int dataPackageLength, int serialNumber, boolean ifVersionIPv4, String absender, String empfaenger, String message){
+        this.dataPackageLength = dataPackageLength;
+        this.serialNumber = serialNumber;
+        this.ifVersionIPv4 = ifVersionIPv4;
+        this.absender = absender;
+        this.empfaenger = empfaenger;
+        this.message = message;
     }
 
     /**

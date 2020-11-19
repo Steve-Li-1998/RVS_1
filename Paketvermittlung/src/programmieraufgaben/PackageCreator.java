@@ -39,9 +39,9 @@ public class PackageCreator {
                 System.out.println("Die IP Version ist nur 4 und 6! Bitte geben Sie \"4\" oder \"6\" ein:");
             }
         }
-        System.out.println("Bitte Geben Sie Ihre IP Adresse ein:");
+        System.out.println("Bitte Geben Sie Ihre IP-Adresse ein:");
         absender = input.nextLine();
-        System.out.println("Bitte Geben Sie die Adresse Ihres gewünschten Empfängers ein:");
+        System.out.println("Bitte Geben Sie die IP-Adresse Ihres gewünschten Empfängers ein:");
         empfaenger = input.nextLine();
         System.out.println("Bitte geben Sie Ihre Nachricht ein:");
         buffer = input.nextLine();
@@ -58,6 +58,7 @@ public class PackageCreator {
      */
     public List<DataPackage> splitPackage(DataPackage dataPackage) {
         List<DataPackage> dataPackages = new LinkedList<>();
+        buffer = buffer.replace("<CR><LF>", "\n");
 
 
         return dataPackages;
