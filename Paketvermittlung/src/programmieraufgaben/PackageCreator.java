@@ -2,8 +2,43 @@ package programmieraufgaben;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Scanner;
 
 public class PackageCreator {
+
+    private boolean ifVersionIPv4;
+    private String absender;
+    private String empfaenger;
+    private String buffer;
+
+    /**
+     * Hier ist die Konstruktor der Klasse PackageCreator
+     * Die Eingabe von benutzern wird hier durchgeführt
+     */
+    public PackageCreator(){
+        String temp;
+        Scanner input = new Scanner(System.in);
+        System.out.println("Bitte geben Sie Ihre gewünschte IP Version ein:");
+        boolean setIPVersionSuccessful = false;
+        while (!setIPVersionSuccessful){
+            temp = input.nextLine();
+            if(0 == temp.compareTo("4")){
+                ifVersionIPv4 = true;
+                setIPVersionSuccessful = true;
+            }else if(0 == temp.compareTo("6")){
+                ifVersionIPv4 = false;
+                setIPVersionSuccessful = true;
+            }else {
+                System.out.println("Die IP Version ist nur 4 und 6! Bitte geben Sie \"4\" oder \"6\" ein:");
+            }
+        }
+        System.out.println("Bitte Geben Sie Ihre IP Adresse ein:");
+        absender = input.nextLine();
+        System.out.println("Bitte Geben Sie die Adresse Ihres gewünschten Empfängers ein:");
+        empfaenger = input.nextLine();
+        System.out.println("Bitte geben Sie Ihre Nachricht ein:");
+        buffer = input.nextLine();
+    }
 
     /**
      * Hier sollen die Kommandozeilen-Abfragen abgefragt und die Antworten
