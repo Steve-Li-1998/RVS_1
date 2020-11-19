@@ -7,6 +7,10 @@ package programmieraufgaben;
 public class DataPackage {
     //maximale Datenteil-Länge
     private int dataPackageLength;
+    private boolean ifVersionIPv4;
+    private String absender;
+    private String empfaenger;
+    private int serialNumber;
     private String message;
 
     /**

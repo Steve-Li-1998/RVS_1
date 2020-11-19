@@ -11,6 +11,7 @@ public class PackageCreator {
     private String absender;
     private String empfaenger;
     private String buffer;
+    private int serialNumberCounter;
 
     /**
      * Hier sollen die Kommandozeilen-Abfragen abgefragt und die Antworten
@@ -57,6 +58,7 @@ public class PackageCreator {
      */
     public List<DataPackage> splitPackage(DataPackage dataPackage) {
         List<DataPackage> dataPackages = new LinkedList<>();
+
 
         return dataPackages;
     }
