@@ -105,6 +105,8 @@ public class PackageCreator {
         if (wordStartIndex.size()!=wordEndIndex.size()){
             wordEndIndex.add(buffer.length());
         }
+
+//---------------------此线以下为测试代码----------------------
         //System.out.println(wordCounter);
         //System.out.println(wordStartIndex.size());
         //System.out.println(wordEndIndex.size());
@@ -115,6 +117,8 @@ public class PackageCreator {
         for (int a = 0;a<wordEndIndex.size();a++){
             System.out.print(wordEndIndex.get(a)+" ");
         }
+
+//---------------------此线以下为测试代码----------------------
 
 //------------------------bug位于此线之下---------------------------------
         int usedWordCounter = 0;
