@@ -1,9 +1,6 @@
 package programmieraufgaben;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class PackageCreator {
 
@@ -59,8 +56,8 @@ public class PackageCreator {
      */
     public List<DataPackage> splitPackage(DataPackage dataPackage) {
         List<DataPackage> dataPackages = new LinkedList<>();
-        ArrayList wordStartIndex = new ArrayList(0);    // diese Array speichert immer den Index erstes Buchstabens eines Wortes
-        ArrayList wordEndIndex = new ArrayList(0);      // diese Array speichert immer den Index letztes Buchstabens eines Wortes + 1
+        Vector wordStartIndex = new Vector(0);    // diese Array speichert immer den Index erstes Buchstabens eines Wortes
+        Vector wordEndIndex = new Vector(0);      // diese Array speichert immer den Index letztes Buchstabens eines Wortes + 1
         int wordCounter = 0;
         buffer = buffer.replace("<CR><LF>", "\n");
         for(int i = 0; i < buffer.length(); i++){
@@ -72,21 +69,21 @@ public class PackageCreator {
 
             }else if ('-' == temp | '/' == temp){
                 wordCounter++;
-                wordStartIndex.add(i);
                 if (wordStartIndex.size() != wordEndIndex.size()){
                     wordEndIndex.add(i);
                 }
+                wordStartIndex.add(i);
                 wordEndIndex.add(i+1);
 
             }else if ('\\' == temp){
                 if ('n' == buffer.charAt(i + 1)){
                     wordCounter++;
-                    wordStartIndex.add(i);
                     if (wordStartIndex.size() != wordEndIndex.size()){
                         wordEndIndex.add(i);
                     }
+                    wordStartIndex.add(i);
                     wordEndIndex.add(i+2);
-
+//System.out.println("huanhang"+wordEndIndex.get(0));
                     i++;
                 }else {
                     if (wordStartIndex.size() == wordEndIndex.size()){
@@ -101,14 +98,21 @@ public class PackageCreator {
                 }
 
             }
-            //if ((temp >= 'a' & temp <= 'z') | (temp >= 'A' & temp <= 'Z') | (temp >= '0' & temp <= '9') | 'ä'==temp){
-            //    System.out.println(temp);
-            //}
 
         }
+        if (wordStartIndex.size()!=wordEndIndex.size()){
+            wordEndIndex.add(buffer.length());
+        }
+        //System.out.println(wordCounter);
+        //System.out.println(wordStartIndex.size());
+        //System.out.println(wordEndIndex.size());
+
+//------------------------bug位于此线之下---------------------------------
         int usedWordCounter = 0;
         while (usedWordCounter < wordCounter){
             //System.out.println(wordCounter);
+
+            //System.out.println(wordEndIndex.get(2));
             usedWordCounter++;
             int dataPackageLength = -1;
             int packageCounter = 0;
@@ -118,11 +122,11 @@ public class PackageCreator {
                         int temp = (int)wordEndIndex.get(i - 1) - (int)wordStartIndex.get(i - 1);
                         System.out.println("Die Nachricht kann nicht versendet werden, da sie ein Wort mit Länge " + temp + " > " +maxDataPackageLength + "enthält.");
                     }else{
-                        String temp = null;
-                        for (int a=usedWordCounter - 1; a<=i - 1;a++){
-                            temp += buffer.substring((int)wordStartIndex.get(a), (int)wordEndIndex.get(a)) + " ";
+                        String temp = buffer.substring((int)wordStartIndex.get(usedWordCounter-1),(int)wordEndIndex.get(usedWordCounter-1));
+                        for (int a = usedWordCounter + 1; a < i; a++){
+                            temp = temp + " " + buffer.substring((int)wordStartIndex.get(a - 1), (int)wordEndIndex.get(a - 1)+1);
                         }
-                        temp = temp.substring(0,temp.length());
+                        temp = temp.substring(0,temp.length() - 1);
                         packageCounter++;
                         dataPackages.add(new DataPackage(dataPackageLength, packageCounter, IPVersion, absender, empfaenger, temp));
                         usedWordCounter = i - 1;
@@ -135,7 +139,7 @@ public class PackageCreator {
             }
         }
 
-
+//------------------------bug位于此线之上---------------------------------
         return dataPackages;
     }
 
