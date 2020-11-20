@@ -1,5 +1,6 @@
 package programmieraufgaben;
 
+import java.sql.SQLSyntaxErrorException;
 import java.util.*;
 
 public class PackageCreator {
@@ -59,7 +60,7 @@ public class PackageCreator {
         Vector wordStartIndex = new Vector(0);    // diese Array speichert immer den Index erstes Buchstabens eines Wortes
         Vector wordEndIndex = new Vector(0);      // diese Array speichert immer den Index letztes Buchstabens eines Wortes + 1
         int wordCounter = 0;
-        buffer = buffer.replace("<CR><LF>", "\n");
+        buffer = buffer.replace("<CR><LF>", "\\n");
         buffer = buffer.trim();
         for(int i = 0; i < buffer.length(); i++){
             char temp = buffer.charAt(i);
@@ -107,6 +108,13 @@ public class PackageCreator {
         //System.out.println(wordCounter);
         //System.out.println(wordStartIndex.size());
         //System.out.println(wordEndIndex.size());
+        for (int a = 0;a<wordStartIndex.size();a++){
+            System.out.print(wordStartIndex.get(a)+" ");
+        }
+        System.out.println();
+        for (int a = 0;a<wordEndIndex.size();a++){
+            System.out.print(wordEndIndex.get(a)+" ");
+        }
 
 //------------------------bug位于此线之下---------------------------------
         int usedWordCounter = 0;
@@ -122,6 +130,7 @@ public class PackageCreator {
                     if (-1 == dataPackageLength){
                         int temp = (int)wordEndIndex.get(i - 1) - (int)wordStartIndex.get(i - 1);
                         System.out.println("Die Nachricht kann nicht versendet werden, da sie ein Wort mit Länge " + temp + " > " +maxDataPackageLength + "enthält.");
+
                     }else{
                         String temp = buffer.substring((int)wordStartIndex.get(usedWordCounter-1),(int)wordEndIndex.get(usedWordCounter-1));
                         for (int a = usedWordCounter + 1; a < i; a++){

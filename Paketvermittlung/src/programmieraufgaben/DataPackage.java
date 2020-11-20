@@ -55,6 +55,7 @@ public class DataPackage {
         System.out.println("Empfänger: " + empfaenger);
         System.out.println("Paketlaufnummer: " + serialNumber);
         System.out.println("Datenteil-Länge: " + dataPackageLength);
+        message=message.replace("\\n","\n");
         System.out.println("Datenteil: " + message);
 
     }
