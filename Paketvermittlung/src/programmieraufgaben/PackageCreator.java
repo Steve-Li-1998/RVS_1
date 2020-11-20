@@ -60,6 +60,7 @@ public class PackageCreator {
         Vector wordEndIndex = new Vector(0);      // diese Array speichert immer den Index letztes Buchstabens eines Wortes + 1
         int wordCounter = 0;
         buffer = buffer.replace("<CR><LF>", "\n");
+        buffer = buffer.trim();
         for(int i = 0; i < buffer.length(); i++){
             char temp = buffer.charAt(i);
             if (' ' == temp){
