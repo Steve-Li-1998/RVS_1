@@ -133,7 +133,7 @@ public class PackageCreator {
                 if (dataPackageLength + (int)wordEndIndex.get(i - 1) - (int)wordStartIndex.get(i - 1) + 1 > maxDataPackageLength){
                     if (-1 == dataPackageLength){
                         int temp = (int)wordEndIndex.get(i - 1) - (int)wordStartIndex.get(i - 1);
-                        System.out.println("Die Nachricht kann nicht versendet werden, da sie ein Wort mit Länge " + temp + " > " +maxDataPackageLength + "enthält.");
+                        System.out.println("Die Nachricht kann nicht versendet werden, da sie ein Wort mit Länge " + temp + " > " +maxDataPackageLength + " enthält.");
 
                     }else{
                         String temp = buffer.substring((int)wordStartIndex.get(usedWordCounter-1),(int)wordEndIndex.get(usedWordCounter-1));
