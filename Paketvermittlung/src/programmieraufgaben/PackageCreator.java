@@ -9,7 +9,7 @@ public class PackageCreator {
     private int IPVersion;
     private String absender;
     private String empfaenger;
-    private List<String> buffer = new LinkedList<>();
+    private final List<String> buffer = new LinkedList<>();
     private int serialNumberCounter;
 
     /**
@@ -55,10 +55,7 @@ public class PackageCreator {
                 buffer.add("\\n");
             }else {
                 tempBuffer = nextLine.split("\\s+");    // geteilt durch ein oder mehrere Leerzeichen
-                for (String a : tempBuffer
-                ) {
-                    buffer.add(a);
-                }
+                Collections.addAll(buffer, tempBuffer);
                 buffer.add("\\n");
             }
         }
@@ -97,52 +94,52 @@ public class PackageCreator {
         int usedWordCounter = 0;
         int dataPackageLength = 0;
         int packageCounter = 0;
-        String tempBuffer = null;
+        StringBuilder tempBuffer = null;
         for (int i = 0; i < buffer.size(); i++){
             if (null == tempBuffer){
                 if (buffer.get(i).length() > maxDataPackageLength){
                     System.out.println("Die Nachricht kann nicht versendet werden, da sie ein Wort mit Länge " + buffer.get(i).length() + " > " +maxDataPackageLength + " enthält.");
                     throw new RuntimeException();
                 }else {
-                    tempBuffer = buffer.get(i);
+                    tempBuffer = new StringBuilder(buffer.get(i));
                     dataPackageLength += buffer.get(i).length();
                 }
             }else {
-                if ("-" == buffer.get(i) | "/" == buffer.get(i) | "\\n" == buffer.get(i)){
+                if ("-".equals(buffer.get(i)) | "/".equals(buffer.get(i)) | "\\n".equals(buffer.get(i))){
                     if (dataPackageLength + buffer.get(i).length() > maxDataPackageLength){
                         packageCounter++;
-                        dataPackages.add(new DataPackage(dataPackageLength, packageCounter, IPVersion, absender, empfaenger, tempBuffer));
+                        dataPackages.add(new DataPackage(dataPackageLength, packageCounter, IPVersion, absender, empfaenger, tempBuffer.toString()));
                         dataPackageLength = 0;
                         tempBuffer = null;
                         usedWordCounter = i;
                         i--;
                     }else {
-                        tempBuffer = tempBuffer + buffer.get(i);
+                        tempBuffer.append(buffer.get(i));
                         dataPackageLength += buffer.get(i).length();
                     }
                 }else {
-                    if ("/" == buffer.get(i - 1) | "-" == buffer.get(i - 1) | "\\n" == buffer.get(i - 1)){
+                    if ("/".equals(buffer.get(i - 1)) | "-".equals(buffer.get(i - 1)) | "\\n".equals(buffer.get(i - 1))){
                         if (dataPackageLength + buffer.get(i).length() > maxDataPackageLength){
                             packageCounter++;
-                            dataPackages.add(new DataPackage(dataPackageLength, packageCounter, IPVersion, absender, empfaenger, tempBuffer));
+                            dataPackages.add(new DataPackage(dataPackageLength, packageCounter, IPVersion, absender, empfaenger, tempBuffer.toString()));
                             dataPackageLength = 0;
                             tempBuffer = null;
                             usedWordCounter = i;
                             i--;
                         }else {
-                            tempBuffer = tempBuffer + buffer.get(i);
+                            tempBuffer.append(buffer.get(i));
                             dataPackageLength += buffer.get(i).length();
                         }
                     }else {
                         if (dataPackageLength + buffer.get(i).length() + 1 > maxDataPackageLength){
                             packageCounter++;
-                            dataPackages.add(new DataPackage(dataPackageLength, packageCounter, IPVersion, absender, empfaenger, tempBuffer));
+                            dataPackages.add(new DataPackage(dataPackageLength, packageCounter, IPVersion, absender, empfaenger, tempBuffer.toString()));
                             dataPackageLength = 0;
                             tempBuffer = null;
                             usedWordCounter = i;
                             i--;
                         }else {
-                            tempBuffer = tempBuffer + " " + buffer.get(i);
+                            tempBuffer.append(" ").append(buffer.get(i));
                             dataPackageLength = dataPackageLength + 1 + buffer.get(i).length();
                         }
                     }
@@ -151,7 +148,7 @@ public class PackageCreator {
         }
         if (usedWordCounter < buffer.size()){
             packageCounter++;
-            dataPackages.add(new DataPackage(dataPackageLength, packageCounter, IPVersion, absender, empfaenger, tempBuffer));
+            dataPackages.add(new DataPackage(dataPackageLength, packageCounter, IPVersion, absender, empfaenger, tempBuffer.toString()));
             dataPackageLength = 0;
             tempBuffer = null;
             usedWordCounter = buffer.size();
@@ -167,8 +164,8 @@ public class PackageCreator {
     public void printOutPackage(List<DataPackage> dataPackages) {
         System.out.println();
         System.out.println("Es sind " + dataPackages.size() +" Datenpakete notwendig.\n");
-        for (int i = 0; i < dataPackages.size(); i++){
-            dataPackages.get(i).show();
+        for (DataPackage dataPackage : dataPackages) {
+            dataPackage.show();
         }
 
     }
