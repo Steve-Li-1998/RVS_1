@@ -9,7 +9,7 @@ public class PackageCreator {
     private int IPVersion;
     private String absender;
     private String empfaenger;
-    private String buffer;
+    private List<String> buffer = new LinkedList<>();
     private int serialNumberCounter;
 
     /**
@@ -43,8 +43,40 @@ public class PackageCreator {
         System.out.println("Bitte Geben Sie die IP-Adresse Ihres gewünschten Empfängers ein:");
         empfaenger = input.nextLine();
         System.out.println("Bitte geben Sie Ihre Nachricht ein:");
-        buffer = input.nextLine();
-
+        boolean ifEnd = true;
+        while (!ifEnd) {
+            String[] tempBuffer;
+            tempBuffer = input.next().split("\\s+");    // geteilt durch ein oder mehrere Leerzeichen
+            for (String a:tempBuffer
+                 ) {
+                buffer.add(a);
+            }
+            if(input.nextLine().equals(".")){
+                ifEnd = false;      // Falls <CR><LF>.<CR><LF>, schließen die Eingabe ab
+            }else {
+                buffer.add("\\n");
+            }
+        }
+        for (int i = 0; i < buffer.size(); i++){
+            while (buffer.get(i).contains("-")){
+                String[] tempBuffer = buffer.get(i).split("-");
+                buffer.remove(i);
+                for(int a = 0; a < tempBuffer.length; a++){
+                    buffer.add(i + 2* a,tempBuffer[a]);
+                    buffer.add(i + 2 * a + 1,"-");
+                }
+                buffer.remove(i + 2 * tempBuffer.length - 1);
+            }
+            while (buffer.get(i).contains("/")){
+                String[] tempBuffer = buffer.get(i).split("-");
+                buffer.remove(i);
+                for(int a = 0; a < tempBuffer.length; a++){
+                    buffer.add(i + 2* a,tempBuffer[a]);
+                    buffer.add(i + 2 * a + 1,"/");
+                }
+                buffer.remove(i + 2 * tempBuffer.length - 1);
+            }
+        }
         return dataPackage;
     }
 
@@ -57,84 +89,23 @@ public class PackageCreator {
      */
     public List<DataPackage> splitPackage(DataPackage dataPackage) {
         List<DataPackage> dataPackages = new LinkedList<>();
-        Vector wordStartIndex = new Vector(0);    // diese Array speichert immer den Index erstes Buchstabens eines Wortes
-        Vector wordEndIndex = new Vector(0);      // diese Array speichert immer den Index letztes Buchstabens eines Wortes + 1
-        int wordCounter = 0;
-        buffer = buffer.replace("<CR><LF>", "\\n");
-        buffer = buffer.trim();
-        for(int i = 0; i < buffer.length(); i++){
-            char temp = buffer.charAt(i);
-            if (' ' == temp){
-                if (wordStartIndex.size() != wordEndIndex.size()){
-                    wordEndIndex.add(i);
-                }
 
-            }else if ('-' == temp | '/' == temp){
-                wordCounter++;
-                if (wordStartIndex.size() != wordEndIndex.size()){
-                    wordEndIndex.add(i);
-                }
-                wordStartIndex.add(i);
-                wordEndIndex.add(i+1);
 
-            }else if ('\\' == temp){
-                if ('n' == buffer.charAt(i + 1)){
-                    wordCounter++;
-                    if (wordStartIndex.size() != wordEndIndex.size()){
-                        wordEndIndex.add(i);
-                    }
-                    wordStartIndex.add(i);
-                    wordEndIndex.add(i+2);
-//System.out.println("huanhang"+wordEndIndex.get(0));
-                    i++;
-                }else {
-                    if (wordStartIndex.size() == wordEndIndex.size()){
-                        wordCounter++;
-                        wordStartIndex.add(i);
-                    }
-                }
-            }else{
-                if (wordStartIndex.size() == wordEndIndex.size()){
-                    wordCounter++;
-                    wordStartIndex.add(i);
-                }
-
-            }
-
-        }
-        if (wordStartIndex.size()!=wordEndIndex.size()){
-            wordEndIndex.add(buffer.length());
-        }
-
-//---------------------此线以下为测试代码----------------------
-        //System.out.println(wordCounter);
-        //System.out.println(wordStartIndex.size());
-        //System.out.println(wordEndIndex.size());
-        for (int a = 0;a<wordStartIndex.size();a++){
-            System.out.print(wordStartIndex.get(a)+" ");
-        }
-        System.out.println();
-        for (int a = 0;a<wordEndIndex.size();a++){
-            System.out.print(wordEndIndex.get(a)+" ");
-        }
-
-//---------------------此线以上为测试代码----------------------
-
-//------------------------bug位于此线之下---------------------------------
+//------------------------此线之下尚未完成---------------------------------
         int usedWordCounter = 0;
-        while (usedWordCounter < wordCounter){
+        while (usedWordCounter < buffer.size()){
             //System.out.println(wordCounter);
 
             //System.out.println(wordEndIndex.get(2));
             usedWordCounter++;
             int dataPackageLength = -1;
             int packageCounter = 0;
-            for (int i = usedWordCounter; i <= wordCounter; i++){
+            for (int i = usedWordCounter; i <= buffer.size(); i++){
                 if (dataPackageLength + (int)wordEndIndex.get(i - 1) - (int)wordStartIndex.get(i - 1) + 1 > maxDataPackageLength){
                     if (-1 == dataPackageLength){
                         int temp = (int)wordEndIndex.get(i - 1) - (int)wordStartIndex.get(i - 1);
                         System.out.println("Die Nachricht kann nicht versendet werden, da sie ein Wort mit Länge " + temp + " > " +maxDataPackageLength + " enthält.");
-
+                        throw new RuntimeException();
                     }else{
                         String temp = null;
                         if (1 == usedWordCounter){
@@ -156,7 +127,7 @@ public class PackageCreator {
             }
         }
 
-//------------------------bug位于此线之上---------------------------------
+//------------------------此线之上尚未完成---------------------------------
         return dataPackages;
     }
 
