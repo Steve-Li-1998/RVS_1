@@ -43,7 +43,7 @@ public class PackageCreator {
         System.out.println("Bitte Geben Sie die IP-Adresse Ihres gewünschten Empfängers ein:");
         empfaenger = input.nextLine();
         System.out.println("Bitte geben Sie Ihre Nachricht ein:");
-        boolean ifEnd = true;
+        boolean ifEnd = false;
         while (!ifEnd) {
             String[] tempBuffer;
             tempBuffer = input.next().split("\\s+");    // geteilt durch ein oder mehrere Leerzeichen
@@ -52,7 +52,7 @@ public class PackageCreator {
                 buffer.add(a);
             }
             if(input.nextLine().equals(".")){
-                ifEnd = false;      // Falls <CR><LF>.<CR><LF>, schließen die Eingabe ab
+                ifEnd = true;      // Falls <CR><LF>.<CR><LF>, schließen die Eingabe ab
             }else {
                 buffer.add("\\n");
             }
@@ -68,7 +68,7 @@ public class PackageCreator {
                 buffer.remove(i + 2 * tempBuffer.length - 1);
             }
             while (buffer.get(i).contains("/")){
-                String[] tempBuffer = buffer.get(i).split("-");
+                String[] tempBuffer = buffer.get(i).split("/");
                 buffer.remove(i);
                 for(int a = 0; a < tempBuffer.length; a++){
                     buffer.add(i + 2* a,tempBuffer[a]);
@@ -93,39 +93,57 @@ public class PackageCreator {
 
 //------------------------此线之下尚未完成---------------------------------
         int usedWordCounter = 0;
-        while (usedWordCounter < buffer.size()){
+        //while (usedWordCounter < buffer.size()){
             //System.out.println(wordCounter);
 
             //System.out.println(wordEndIndex.get(2));
-            usedWordCounter++;
-            int dataPackageLength = -1;
+            //usedWordCounter++;
+            int dataPackageLength = 0;
             int packageCounter = 0;
-            for (int i = usedWordCounter; i <= buffer.size(); i++){
-                if (dataPackageLength + (int)wordEndIndex.get(i - 1) - (int)wordStartIndex.get(i - 1) + 1 > maxDataPackageLength){
-                    if (-1 == dataPackageLength){
-                        int temp = (int)wordEndIndex.get(i - 1) - (int)wordStartIndex.get(i - 1);
-                        System.out.println("Die Nachricht kann nicht versendet werden, da sie ein Wort mit Länge " + temp + " > " +maxDataPackageLength + " enthält.");
+            for (int i = 0; i < buffer.size(); i++){
+                String tempBuffer = null;
+                if (usedWordCounter == i){
+                    if (buffer.get(i).length() >= maxDataPackageLength){
+                        System.out.println("Die Nachricht kann nicht versendet werden, da sie ein Wort mit Länge " + buffer.get(i).length() + " > " +maxDataPackageLength + " enthält.");
                         throw new RuntimeException();
-                    }else{
-                        String temp = null;
-                        if (1 == usedWordCounter){
-                            temp = buffer.substring((int)wordStartIndex.get(usedWordCounter-1),(int)wordEndIndex.get(usedWordCounter-1));
-                        }
-                        for (int a = usedWordCounter + 1; a <= i; a++){
-                            temp = temp + " " + buffer.substring((int)wordStartIndex.get(a - 1), (int)wordEndIndex.get(a - 1));
-                        }
-                        temp = temp.substring(0,temp.length() - 1);
-                        packageCounter++;
-                        dataPackages.add(new DataPackage(dataPackageLength, packageCounter, IPVersion, absender, empfaenger, temp));
-                        usedWordCounter = i - 1;
+                    }else {
+                        tempBuffer = buffer.get(i);
+                        dataPackageLength += buffer.get(i).length();
                     }
-                    dataPackageLength = -1;
-                    break;
-                }else{
-                    dataPackageLength = dataPackageLength + (int)wordEndIndex.get(i - 1) - (int)wordStartIndex.get(i - 1) + 1;
+                }else {
+                    if ("-" == buffer.get(i) | "/" == buffer.get(i)){
+                        if (dataPackageLength + buffer.get(i).length() >= maxDataPackageLength){
+                            dataPackages.add(new DataPackage(dataPackageLength, packageCounter, IPVersion, absender, empfaenger, tempBuffer));
+                            usedWordCounter = i;
+                            i--;
+                        }else {
+                            tempBuffer = tempBuffer + buffer.get(i);
+                            dataPackageLength += buffer.get(i).length();
+                        }
+                    }else {
+                        if ('/' == tempBuffer.charAt(tempBuffer.length() - 1) | '-' == tempBuffer.charAt(tempBuffer.length() - 1)){
+                            if (dataPackageLength + buffer.get(i).length() >= maxDataPackageLength){
+                                dataPackages.add(new DataPackage(dataPackageLength, packageCounter, IPVersion, absender, empfaenger, tempBuffer));
+                                usedWordCounter = i;
+                                i--;
+                            }else {
+                                tempBuffer = tempBuffer + buffer.get(i);
+                                dataPackageLength += buffer.get(i).length();
+                            }
+                        }else {
+                            if (dataPackageLength + buffer.get(i).length() + 1 >= maxDataPackageLength){
+                                dataPackages.add(new DataPackage(dataPackageLength, packageCounter, IPVersion, absender, empfaenger, tempBuffer));
+                                usedWordCounter = i;
+                                i--;
+                            }else {
+                                tempBuffer = tempBuffer + " " + buffer.get(i);
+                                dataPackageLength = dataPackageLength + 1 + buffer.get(i).length();
+                            }
+                        }
+                    }
                 }
             }
-        }
+        //}
 
 //------------------------此线之上尚未完成---------------------------------
         return dataPackages;
