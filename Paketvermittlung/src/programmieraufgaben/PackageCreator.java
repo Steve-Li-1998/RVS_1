@@ -24,6 +24,7 @@ public class PackageCreator {
         maxDataPackageLength = dataPackage.getDataPackageLength();
         String temp;
         Scanner input = new Scanner(System.in);
+        System.out.println();
         System.out.println("Bitte geben Sie Ihre gewünschte IP Version ein:");
         boolean setIPVersionSuccessful = false;     //Diese Variable ändert sich wahr, nachdem die IP-Version erfolgreich eingesetzt wurde.
         while (!setIPVersionSuccessful){
@@ -164,6 +165,7 @@ public class PackageCreator {
      * @param dataPackages Hier wird die Liste übergeben, deren Elemente in die Kommandozeile ausgegeben werden sollen
      */
     public void printOutPackage(List<DataPackage> dataPackages) {
+        System.out.println();
         System.out.println("Es sind " + dataPackages.size() +" Datenpakete notwendig.\n");
         for (int i = 0; i < dataPackages.size(); i++){
             dataPackages.get(i).show();
