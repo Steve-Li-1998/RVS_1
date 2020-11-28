@@ -7,6 +7,11 @@ package programmieraufgaben;
 public class DataPackage {
     //maximale Datenteil-Länge
     private int dataPackageLength;
+    private int serialNumber;
+    private int IPVersion;
+    private String absender;
+    private String empfaenger;
+    private String message;
 
     /**
      * Erzeugt ein DataPackage Objekt und speichert beim erzeugen die maximale Datenteil-Länge
@@ -14,6 +19,18 @@ public class DataPackage {
      */
     public DataPackage(int dataPackageLength) {
         this.dataPackageLength = dataPackageLength;
+    }
+
+    /**
+     *
+     */
+    public DataPackage(int dataPackageLength, int serialNumber, int IPVersion, String absender, String empfaenger, String message){
+        this.dataPackageLength = dataPackageLength;
+        this.serialNumber = serialNumber;
+        this.IPVersion = IPVersion;
+        this.absender = absender;
+        this.empfaenger = empfaenger;
+        this.message = message;
     }
 
     /**
@@ -30,5 +47,15 @@ public class DataPackage {
      */
     public void setDataPackageLength(int dataPackageLength) {
         this.dataPackageLength = dataPackageLength;
+    }
+
+    public void show(){
+        System.out.println("Version: " + IPVersion);
+        System.out.println("Absender: " + absender);
+        System.out.println("Empfänger: " + empfaenger);
+        System.out.println("Paketlaufnummer: " + serialNumber);
+        System.out.println("Datenteil-Länge: " + dataPackageLength);
+        System.out.println("Datenteil: " + message);
+        System.out.println();
     }
 }
