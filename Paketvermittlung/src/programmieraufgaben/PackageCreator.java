@@ -48,7 +48,10 @@ public class PackageCreator {
             String nextLine = input.nextLine();
             String[] tempBuffer;
             if(nextLine.equals(".")){
+                buffer.remove(buffer.size() - 1);
                 ifEnd = true;      // Falls <CR><LF>.<CR><LF>, schließen die Eingabe ab
+            }else if (nextLine.isBlank()){
+                buffer.add("\\n");
             }else {
                 tempBuffer = nextLine.split("\\s+");    // geteilt durch ein oder mehrere Leerzeichen
                 for (String a : tempBuffer
@@ -106,6 +109,7 @@ public class PackageCreator {
             }else {
                 if ("-" == buffer.get(i) | "/" == buffer.get(i) | "\\n" == buffer.get(i)){
                     if (dataPackageLength + buffer.get(i).length() > maxDataPackageLength){
+                        packageCounter++;
                         dataPackages.add(new DataPackage(dataPackageLength, packageCounter, IPVersion, absender, empfaenger, tempBuffer));
                         dataPackageLength = 0;
                         tempBuffer = null;
@@ -118,6 +122,7 @@ public class PackageCreator {
                 }else {
                     if ("/" == buffer.get(i - 1) | "-" == buffer.get(i - 1) | "\\n" == buffer.get(i - 1)){
                         if (dataPackageLength + buffer.get(i).length() > maxDataPackageLength){
+                            packageCounter++;
                             dataPackages.add(new DataPackage(dataPackageLength, packageCounter, IPVersion, absender, empfaenger, tempBuffer));
                             dataPackageLength = 0;
                             tempBuffer = null;
@@ -129,6 +134,7 @@ public class PackageCreator {
                         }
                     }else {
                         if (dataPackageLength + buffer.get(i).length() + 1 > maxDataPackageLength){
+                            packageCounter++;
                             dataPackages.add(new DataPackage(dataPackageLength, packageCounter, IPVersion, absender, empfaenger, tempBuffer));
                             dataPackageLength = 0;
                             tempBuffer = null;
@@ -141,6 +147,13 @@ public class PackageCreator {
                     }
                 }
             }
+        }
+        if (usedWordCounter < buffer.size()){
+            packageCounter++;
+            dataPackages.add(new DataPackage(dataPackageLength, packageCounter, IPVersion, absender, empfaenger, tempBuffer));
+            dataPackageLength = 0;
+            tempBuffer = null;
+            usedWordCounter = buffer.size();
         }
         return dataPackages;
     }
