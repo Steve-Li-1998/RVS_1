@@ -62,20 +62,20 @@ public class PackageCreator {
             }
         }
         for (int i = 0; i < buffer.size(); i++){
-            while (buffer.get(i).contains("-")){
+            if (buffer.get(i).contains("-") & buffer.get(i).length() != 1){
                 String[] tempBuffer = buffer.get(i).split("-");
                 buffer.remove(i);
                 for(int a = 0; a < tempBuffer.length; a++){
-                    buffer.add(i + 2* a,tempBuffer[a]);
+                    buffer.add(i + 2* a, tempBuffer[a]);
                     buffer.add(i + 2 * a + 1,"-");
                 }
                 buffer.remove(i + 2 * tempBuffer.length - 1);
             }
-            while (buffer.get(i).contains("/")){
+            if (buffer.get(i).contains("/") & buffer.get(i).length() != 1){
                 String[] tempBuffer = buffer.get(i).split("/");
                 buffer.remove(i);
                 for(int a = 0; a < tempBuffer.length; a++){
-                    buffer.add(i + 2* a,tempBuffer[a]);
+                    buffer.add(i + 2* a, tempBuffer[a]);
                     buffer.add(i + 2 * a + 1,"/");
                 }
                 buffer.remove(i + 2 * tempBuffer.length - 1);
